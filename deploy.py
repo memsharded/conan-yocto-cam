@@ -1,7 +1,7 @@
 import os, time, shutil
 import subprocess
 
-URL_TGZ="http://192.168.1.41:8081/artifactory/list/conan-local/diego/image-filter/0.0.1/testing/package/8df15f70e52241368355aaa0bed65e4b0bd9a084/conan_package.tgz"
+URL_TGZ="http://192.168.1.41:8081/artifactory/list/conan-local/diego/image-filter/0.0.1/testing/package/283703a4caf5b5bbec000125a4ca8b0dd5394d36/conan_package.tgz"
 
 def run_check(): 
     os.system("rm -r check")
