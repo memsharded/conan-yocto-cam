@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
     cv::moveWindow(windowName, 20, 20);
 
     Detector detector;
-    cv::CascadeClassifier carClassifier = detector.createClassifier("../res/cars.xml");
+    //cv::CascadeClassifier carClassifier = detector.createClassifier("../res/cars.xml");
     cv::Mat originalFrame;
     std::string decodedMsg;
     Decoder decoder;
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
             continue;
         }
         images.push_back(originalFrame);
-        images.push_back(detector.detectClassifier(carClassifier, originalFrame));
+        //images.push_back(detector.detectClassifier(carClassifier, originalFrame));
         images.push_back(detector.cannyFilter(originalFrame));
         images.push_back(detector.detectLines(originalFrame));
 
