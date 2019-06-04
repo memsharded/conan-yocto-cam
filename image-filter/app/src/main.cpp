@@ -73,7 +73,7 @@ cv::Mat makeCanvas(std::vector<cv::Mat>& vecMat, int windowHeight, int nRows)
 
 int main(int argc, char* argv[])
 {
-    std::string broker{"localhost"};
+    std::string broker{"192.168.1.41"};
     std::string port{"5559"};
     if (argc > 1)
     {

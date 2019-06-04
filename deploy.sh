@@ -1,7 +1,8 @@
 #!/bin/bash
 
-URL_TGZ="https://dl.bintray.com/danimtb/helloworld/danimtb/Hello/1.0/testing/0/package/90ee443cae5dd5c1b4861766ac14dc6fae231a92/0/conan_package.tgz"
+URL_TGZ="http://192.168.1.41:8081/artifactory/list/conan-local/diego/image-filter/0.0.1/testing/package/8df15f70e52241368355aaa0bed65e4b0bd9a084/conan_package.tgz"
 APP_PATH="bin/app"
+
 
 run_check_directory()
 {
@@ -11,7 +12,7 @@ run_check_directory()
     sleep 1
     wget "$URL_TGZ"
     tar -xzf conan_package.tgz
-    cd ..
+    rm conan_package.tgz
 }
 
 read_binary_content ()
@@ -26,7 +27,7 @@ run_check_directory
 while [ 1 ]
 do
     rm -r execute
-    cp -r ./check ./execute
+    cp -R ./check ./execute
     cd execute
     $APP_PATH &
     app_pid=$!
