@@ -1,4 +1,4 @@
-import os, time, shutil
+import os, time
 import subprocess
 
 URL_TGZ="http://192.168.1.41:8081/artifactory/list/conan-local/diego/image-filter/0.0.1/testing/package/283703a4caf5b5bbec000125a4ca8b0dd5394d36/conan_package.tgz"
@@ -27,6 +27,6 @@ while True:
             proc.terminate()
             os.remove("bin/app")
         os.system("mkdir bin")
-        shutil.copy2("check/bin/app", "bin/app")
+        os.system("cp check/bin/app bin/app")
         proc = subprocess.Popen(["bin/app"]) 
     time.sleep(5)
