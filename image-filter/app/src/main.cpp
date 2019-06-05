@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
         images.push_back(originalFrame);
         //images.push_back(detector.detectClassifier(carClassifier, originalFrame));
         images.push_back(detector.cannyFilter(originalFrame));
-        images.push_back(detector.detectLines(originalFrame));
+        //images.push_back(detector.detectLines(originalFrame));
 
         cv::Mat canvas = makeCanvas(images, 800, 2);
         cv::imshow(windowName, canvas);

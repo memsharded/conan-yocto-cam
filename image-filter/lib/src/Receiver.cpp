@@ -23,11 +23,11 @@ void Receiver::connect()
 
 std::string Receiver::receive()
 {
-    std::cout << "Receiver::receive(): Init" << std::endl;
+    //std::cout << "Receiver::receive(): Init" << std::endl;
     zmq::message_t env;
     subscriber.recv(&env);
     std::string env_str = std::string(static_cast<char*>(env.data()), env.size());
-    std::cout << "Receiver::receive(): Received envelope '" << env_str << "'" << std::endl;
+    //std::cout << "Receiver::receive(): Received envelope '" << env_str << "'" << std::endl;
 
     zmq::message_t msg;
     subscriber.recv(&msg);
