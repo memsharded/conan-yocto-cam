@@ -111,11 +111,11 @@ int main(int argc, char* argv[])
         images.push_back(originalFrame);
         //images.push_back(detector.detectClassifier(carClassifier, originalFrame));
         images.push_back(detector.cannyFilter(originalFrame));
-        //images.push_back(detector.detectLines(originalFrame));
+        images.push_back(detector.detectLines(originalFrame));
 
         cv::Mat canvas = makeCanvas(images, 800, 2);
         cv::imshow(windowName, canvas);
-        if (cv::waitKey(10) == 27)
+        if (cv::waitKey(500) == 27)
         {
             std::cout << "Esc key is pressed by user. Stopping processing" << std::endl;
             break;

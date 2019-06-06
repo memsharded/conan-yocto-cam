@@ -28,10 +28,13 @@ while True:
         print "CHANGES! Launching app"
         previous = content
         if proc:
-            os.system("killall -9 bin/app")
+            print "---- Killing bin/app --- "
+            os.system("killall -9 app")
             os.remove("bin/app")
-            proc = True
         os.system("mkdir bin")
         os.system("cp check/bin/app bin/app")
-        os.system("bin/app &") 
-    time.sleep(5)
+        os.system("bin/app &")
+        proc = True
+    else:
+        print "CONTENT bin/app is same, don't do anythin"
+    time.sleep(3)
