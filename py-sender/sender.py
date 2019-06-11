@@ -1,8 +1,12 @@
-import zmq
 import os
-import time
 import random
 import sys
+import time
+
+import msgpack
+import numpy as np
+import zmq
+from PIL import Image
 
 
 class ImageReader():
@@ -24,11 +28,10 @@ class ImageReader():
     @staticmethod
     def _read_image(image_path):
         import base64
-        f = open(image_path,'rb')
-        bytes = bytearray(f.read())
-        string = base64.b64encode(bytes)
-        f.close()
-        return string
+        im = Image.open(image_path)
+        img_b64 = base64.b64encode(np.array(im)).decode()
+        image = base64.b64decode(img_b64.encode())
+        return image
 
 
 class Sender():
@@ -53,7 +56,7 @@ class Sender():
 
 def main():
     proxy = "*"
-    port = "5559"
+    port = "9001"
     if len(sys.argv) > 1:
         proxy = sys.argv[1]
     if len(sys.argv) > 2:
@@ -65,10 +68,23 @@ def main():
 
     sender.conect()
 
+    data = {
+        'user': {
+            'angle': -0.7229224524674215,
+            'throttle': 0.44270997587430183
+        },
+        'pilot': {
+            'angle': -0.7229224524674215,
+            'throttle': 0.44270997587430183
+        },
+        'mode': 'user'
+    }
+
     while True:
         for img in reader.images:
             print("Sending image...")
-            sender.send(b"donkeycar.camera", img)
+            data["img"] = img
+            sender.send(b"donkeycar.training", msgpack.packb(data, use_bin_type=True))
             time.sleep(1)
 
     sender.disconnect()

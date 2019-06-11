@@ -45,25 +45,26 @@ cv::Mat Detector::cannyFilter(const cv::Mat originalFrame)
 
 cv::Mat Detector::detectLines(const cv::Mat originalFrame)
 {
-    cv::Mat dst_frame, cdst_frame, cdstp_frame;
-    cv::Canny(originalFrame, dst_frame, 75, 150, 3);
+    cv::Mat greyFrame, finalFrame;
+    cv::Mat cannyFrame = this->cannyFilter(originalFrame);
 
     // Copy edges to the images that will display the results in BGR
-    cv::cvtColor(dst_frame, cdst_frame, cv::COLOR_GRAY2BGR);
-    cdstp_frame = cdst_frame.clone();
+    cv::cvtColor(cannyFrame, greyFrame, cv::COLOR_GRAY2BGR);
+    finalFrame = greyFrame.clone();
 
     // Probabilistic Line Transform
     std::vector<cv::Vec4i> linesP; // will hold the results of the detection
-    cv::HoughLinesP(dst_frame, linesP, 1, CV_PI/180, 80, 60, 5); // runs the actual detection
+    cv::HoughLinesP(cannyFrame, linesP, 1, CV_PI/180, 60, 50, 10); // runs the actual detection
 
     // Draw the lines
     for(size_t i = 0; i < linesP.size(); i++)
     {
         cv::Vec4i l = linesP[i];
         if(l[1]>l[3])
-            cv::line(cdstp_frame, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 2, cv::LINE_AA);
+            cv::line(finalFrame, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,0,255), 2, cv::LINE_AA);
         else
-            cv::line(cdstp_frame, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,255,0), 2, cv::LINE_AA);
+            cv::line(finalFrame, cv::Point(l[0], l[1]), cv::Point(l[2], l[3]), cv::Scalar(0,255,0), 2, cv::LINE_AA);
+      
     }
-    return cdstp_frame;
+    return finalFrame;
 }

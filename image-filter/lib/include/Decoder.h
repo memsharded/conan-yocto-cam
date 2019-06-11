@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "Message.h"
+
 
 class Decoder
 {
@@ -16,7 +18,9 @@ private:
 
 
 public:
-    std::string decodeBase64(const std::string& encoded_string);
+    std::string decodeBase64(const std::string& encodedString);
+    Message decodeMessage(const std::string& encodedString);
+    std::vector<unsigned char> decodeImage(const std::string& encodedString);
 };
 
 #endif

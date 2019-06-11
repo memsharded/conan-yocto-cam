@@ -1,5 +1,6 @@
 #include "Decoder.h"
 
+
 std::string Decoder::decodeBase64(const std::string& encodedString)
 {
     int in_len = encodedString.size();
@@ -52,4 +53,16 @@ std::string Decoder::decodeBase64(const std::string& encodedString)
     }
 
     return ret;
+}
+
+Message Decoder::decodeMessage(const std::string& encodedString)
+{
+    msgpack::object_handle oh = msgpack::unpack(encodedString.data(), encodedString.size());
+    Message message = oh.get().as<Message>();
+    return message;
+}
+
+std::vector<unsigned char> Decoder::decodeImage(const std::string& encodedString)
+{
+    return std::vector<unsigned char>(encodedString.begin(), encodedString.end());
 }

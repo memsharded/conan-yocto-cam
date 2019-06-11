@@ -3,10 +3,12 @@
 #include <string>
 #include <thread>
 
+#include <opencv2/opencv.hpp>
+
 #include "Decoder.h"
 #include "Detector.h"
 #include "Receiver.h"
-
+#include "Message.h"
 
 /**
      * @brief makeCanvas Makes composite image from the given images
@@ -73,8 +75,8 @@ cv::Mat makeCanvas(std::vector<cv::Mat>& vecMat, int windowHeight, int nRows)
 
 int main(int argc, char* argv[])
 {
-    std::string broker{"192.168.1.41"};
-    std::string port{"5559"};
+    std::string broker{"localhost"};
+    std::string port{"9001"};
     if (argc > 1)
     {
         broker = std::string(argv[1]);
@@ -84,42 +86,50 @@ int main(int argc, char* argv[])
         port = std::string(argv[2]);
     }
 
-    Receiver receiver{broker, port, "donkeycar.camera"};
+    Receiver receiver{broker, port, "donkeycar.training"};
     receiver.connect();
 
     // Create a Window
     std::string windowName = "ImageFilter";
     cv::namedWindow(windowName, cv::WINDOW_NORMAL);
+    std::cout << "namedWindow" << std::endl;
     cv::moveWindow(windowName, 20, 20);
+    std::cout << "moveWindow" << std::endl;
 
     Detector detector;
-    //cv::CascadeClassifier carClassifier = detector.createClassifier("../res/cars.xml");
+    //cv::CascadeClassifier carClassifier = detector.createClassifier("cars.xml");
     cv::Mat originalFrame;
-    std::string decodedMsg;
     Decoder decoder;
     std::vector<cv::Mat> images;
 
     while(true)
     {
+        Message message;
         std::string msg = receiver.receive();
-        decodedMsg = decoder.decodeBase64(msg);
-        originalFrame = imdecode(std::vector<uchar>(decodedMsg.begin(), decodedMsg.end()), cv::IMREAD_UNCHANGED);
+        message = decoder.decodeMessage(msg);
+        std::cout << "Decoded USER: " << message.user["angle"] << std::endl;
+        std::cout << "Decoded PILOT: " << message.pilot["throttle"] << std::endl;
+        std::cout << "Decoded MODE: " << message.mode << std::endl;
+        std::cout << "Decoded IMG: " << message.img.substr(0, 40) << std::endl;
+        auto decodedImage = decoder.decodeImage(message.img);
+        originalFrame = cv::Mat(120, 160, CV_8UC3, decodedImage.data());
 
-        if(originalFrame.empty()){
+        if(originalFrame.empty())
+        {
+            std::cout << "Continue!" << std::endl;
             continue;
         }
         images.push_back(originalFrame);
-        //images.push_back(detector.detectClassifier(carClassifier, originalFrame));
-        images.push_back(detector.cannyFilter(originalFrame));
         images.push_back(detector.detectLines(originalFrame));
+        //images.push_back(detector.detectClassifier(carClassifier, originalFrame));
 
         cv::Mat canvas = makeCanvas(images, 800, 2);
         cv::imshow(windowName, canvas);
-        if (cv::waitKey(500) == 27)
-        {
+        if (cv::waitKey(500) == 27)                                                     
+        {                                                                               
             std::cout << "Esc key is pressed by user. Stopping processing" << std::endl;
-            break;
-        }
+            break;                                                                      
+        }                                                                               
         images.clear();
     }
 

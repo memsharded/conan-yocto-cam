@@ -14,8 +14,8 @@ private:
 public:
     cv::CascadeClassifier createClassifier(const std::string xmlFilepath);
     cv::Mat detectClassifier(const cv::CascadeClassifier classifier, const cv::Mat original_frame);
-    cv::Mat detectLines(const cv::Mat original_frame);
     cv::Mat cannyFilter(const cv::Mat original_frame);
+    cv::Mat detectLines(const cv::Mat original_frame);
 };
 
 #endif
