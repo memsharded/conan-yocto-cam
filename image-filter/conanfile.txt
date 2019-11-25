@@ -6,6 +6,9 @@ opencv/3.4.5@conan/stable
 [generators]
 cmake
 
+[options]
+opencv:gtk=2
+
 
   
 
