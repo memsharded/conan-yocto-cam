@@ -5,5 +5,4 @@ project(image-filter LANGUAGES CXX)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-add_subdirectory(lib)
-add_subdirectory(app)
+add_subdirectory(src)
